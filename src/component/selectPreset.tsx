@@ -186,7 +186,7 @@ export const SelectLivePreset: React.FC<{
                                     {preset.data.length > 0 && (
                                         <label key={index}>
                                             <div className="livePresetContainer" title={preset.data.map(obj => ((({ originalCharaName: _1, replCharaName: _2, dressName: _3, ...p }) => {
-                                                    [_1 === "" ? "n/a → " : `${_1} → `, _2 === "" ? "n/a" : _2, _3 === "" ? "(n/a)" : `(${_3})`].join("")
+                                                    return (_1 === "" ? "n/a → " : `${_1} → `) + (_2 === "" ? "n/a" : _2) + (_3 === "" ? "(n/a)" : `(${_3})`)
                                                 })(obj))).join("\n")}>
                                                 <input type="radio" name="presetRadio" onClick={() => onPresetRadioClick(index)} onChange={() => setSelectedPreset(preset)} />
                                                 {`preset${index}`}

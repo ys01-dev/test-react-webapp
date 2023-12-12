@@ -11,9 +11,18 @@ input[type=radio] {
     cursor: pointer;
 }
 
-
 .center {
     text-align: center;
+    padding-bottom: 60px;
+}
+
+.liveCharaListContainer {
+    padding-left: calc(50% - 220px);
+    
+}
+.liveCharaListContainer div {
+    text-align: left;
+    width: 700px;
 }
 
 .searchTextBox {

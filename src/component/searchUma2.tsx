@@ -166,18 +166,20 @@ const SearchUma2 = () => {
             )}
             <Link to="/home">→HomeChara</Link>
             <div className="center">
-                <div>
-                    {liveCharaRadioArr.map((radio, index) =>
-                        <div key={index}>
-                            <label key={index}>
-                                <input type="radio" name="liveChara" defaultChecked={radio.checked} onClick={() => onChangeliveCharaRadio(radio.liveChara, radio.fun, index)} />
-                                {`${index}
-                                ${radio.liveChara.originalCharaID + ":" + (radio.liveChara.originalCharaName.length === 0 ? "n/a" : radio.liveChara.originalCharaName)}
-                                → ${radio.liveChara.replCharaID + ":" + (radio.liveChara.replCharaName.length === 0 ? "n/a" : radio.liveChara.replCharaName)}
-                                (${radio.liveChara.dressID + ":" + (radio.liveChara.dressName.length === 0 ? "n/a" : radio.liveChara.dressName)})`}
-                            </label>
-                        </div>
-                    )}
+                <div className="liveCharaListArea">
+                    <div className="liveCharaListContainer">
+                        {liveCharaRadioArr.map((radio, index) =>
+                            <div key={index}>
+                                <label key={index}>
+                                    <input type="radio" name="liveChara" defaultChecked={radio.checked} onClick={() => onChangeliveCharaRadio(radio.liveChara, radio.fun, index)} />
+                                    {`${index}
+                                    ${radio.liveChara.originalCharaID + ":" + (radio.liveChara.originalCharaName.length === 0 ? "n/a" : radio.liveChara.originalCharaName)}
+                                    → ${radio.liveChara.replCharaID + ":" + (radio.liveChara.replCharaName.length === 0 ? "n/a" : radio.liveChara.replCharaName)}
+                                    (${radio.liveChara.dressID + ":" + (radio.liveChara.dressName.length === 0 ? "n/a" : radio.liveChara.dressName)})`}
+                                </label>
+                            </div>
+                        )}
+                    </div>
                     <button className="button" onClick={onAddButton}>add</button>
                     <button onClick={onRemoveButton}>remove</button>
                 </div>
@@ -196,7 +198,8 @@ const SearchUma2 = () => {
                     <button onClick={onJsonClick} className="button">json</button>
                 </div>
                 <div>
-                    <label><input type="checkbox" defaultChecked={isEnableCharaRepl} onChange={e => setEnableCharaReplCheck(e.target.checked)} />
+                    <label>
+                        <input type="checkbox" defaultChecked={isEnableCharaRepl} onChange={e => setEnableCharaReplCheck(e.target.checked)} />
                         enable character replacement
                     </label>
                 </div>
