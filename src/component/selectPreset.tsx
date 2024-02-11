@@ -1,6 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-import { targetUrl } from "../common"
+import { deletePreset, updatePreset } from "../common"
 import { chara_name_data as Chara } from '../tables/chara_name_data'
 import { dress_name_data as Dress } from '../tables/dress_name_data'
 import { umamusumeDoc, initUmaHome, umaLive, initUmaLive, umaHome, umaLiveChara } from '../tables/umamusume'
@@ -17,7 +16,7 @@ export const SelectHomePreset: React.FC<{
     const [selectedPreset, setSelectedPreset] = React.useState<umaHome>(initUmaHome)
     const [selectedRadio, setSelectedRadio] = React.useState<{ index: number, _id: string }>({ index: -1, _id: "" })
 
-    const onUpdateClick = () => {
+    const onUpdateClick = async () => {
         if (selectedRadio.index < 0) {
             alert("preset isn't selected")
             return
@@ -25,41 +24,38 @@ export const SelectHomePreset: React.FC<{
             alert("character or dress isn't selected")
             return
         }
+        let ret
 
-        axios.patch(targetUrl + "updateHomePreset", {
-            col: umamusumeDoc.uma_home,
-            _id: selectedRadio._id,
-            charaID: selectedReplCharaData.id,
-            charaName: selectedReplCharaData.chara_name,
-            dressID: selectedDressData.id,
-            dressName: selectedDressData.dress_name,
-            dressDesc: selectedDressData.dress_desc
-        }).then(res => {
-            alert(res.data.message)
+        try {
+            ret = await updatePreset("updateHomePreset", {
+                col: umamusumeDoc.uma_home,
+                _id: selectedRadio._id,
+                charaID: selectedReplCharaData.id,
+                charaName: selectedReplCharaData.chara_name,
+                dressID: selectedDressData.id,
+                dressName: selectedDressData.dress_name,
+                dressDesc: selectedDressData.dress_desc
+            })
             onPresetClick()
-        }).catch(err => {
-            alert(err.response === undefined ? err.message : err.response.data.message)
-        })
+        } catch(err) {
+            ret =err
+        }
+        alert(ret)
     }
 
-    const onDeleteClick = () => {
+    const onDeleteClick = async () => {
         if (selectedRadio.index < 0) {
             alert("preset isn't selected")
-            return
-        }
-
-        if (window.confirm("are you sure to delete?")) {
-            axios.delete(targetUrl + "deletePreset", {
-                data: {
-                    col: umamusumeDoc.uma_home,
-                    _id: selectedRadio._id
-                }
-            }).then(res => {
-                alert(res.data.message)
+        } else if (window.confirm("are you sure to delete?")) {
+            let ret
+            
+            try {
+                ret = await deletePreset({ col: umamusumeDoc.uma_home, _id: selectedRadio._id })
                 onPresetClick()
-            }).catch(err => {
-                alert(err.response === undefined ? err.message : err.response.data.message)
-            })
+            } catch (err) {
+                ret = err
+            }
+            alert(ret)
         }
     }
 
@@ -72,7 +68,7 @@ export const SelectHomePreset: React.FC<{
         <div className="modalContainer">
             <div className="overlay" onClick={() => setModalVisible(false)} />
             <div className="modalContent">
-                <p>select preset</p>
+                <p className="presetTitle">select preset</p>
                 <button className="closeBtn" onClick={() => setModalVisible(false)}>✕</button>
                 <div className="presetContainer">
                     {presetData.length > 0 && (
@@ -90,8 +86,8 @@ export const SelectHomePreset: React.FC<{
                     )}
                 </div>
                 <div className="modalBtnContainer">
-                    <button className="button" onClick={() => onApplyPresetClick(selectedPreset)}>apply</button>
-                    <button className="button" onClick={onUpdateClick}>update</button>
+                    <button onClick={() => onApplyPresetClick(selectedPreset)}>apply</button>
+                    <button onClick={onUpdateClick}>update</button>
                     <button className="deleteBtn" onClick={onDeleteClick}>delete</button>
                 </div>
             </div>
@@ -110,42 +106,39 @@ export const SelectLivePreset: React.FC<{
     const [selectedPresetIndex, setSelectedPresetIndex] = React.useState<number>(-1)
     const [selectedPresetIndexObj, setSelectedPresetIndexObj] = React.useState<{[prop: string]: number}>({})
 
-    const onUpdateClick = () => {
+    const onUpdateClick = async () => {
         if (selectedPresetIndex < 0) {
             alert("preset isn't selected")
             return
         }
+        let ret
 
-        axios.patch(targetUrl + "updateLivePreset", {
-            col: umamusumeDoc.uma_live,
-            _id: selectedPreset._id,
-            data: selectedLiveCharaArr
-        }).then(res => {
-            alert(res.data.message)
+        try {
+            ret = await updatePreset("updateLivePreset", {
+                col: umamusumeDoc.uma_live,
+                _id: selectedPreset._id,
+                data: selectedLiveCharaArr
+            })
             onPresetClick()
-        }).catch(err => {
-            alert(err.response === undefined ? err.message : err.response.data.message)
-        })
+        } catch(err) {
+            ret =err
+        }
+        alert(ret)
     }
 
-    const onDeleteClick = () => {
+    const onDeleteClick = async () => {
         if (selectedPresetIndex < 0) {
             alert("preset isn't selected")
-            return
-        }
+        } else if (window.confirm("are you sure to delete?")) {
+            let ret
 
-        if (window.confirm("are you sure to delete?")) {
-            axios.delete(targetUrl + "deletePreset", {
-                data: {
-                    col: umamusumeDoc.uma_live,
-                    _id: selectedPreset._id
-                }
-            }).then(res => {
-                alert(res.data.message)
+            try {
+                ret = await deletePreset({ col: umamusumeDoc.uma_live, _id: selectedPreset._id })
                 onPresetClick()
-            }).catch(err => {
-                alert(err.response === undefined ? err.message : err.response.data.message)
-            })
+            } catch (err) {
+                ret = err
+            }
+            alert(ret)
         }
     }
 
@@ -170,7 +163,7 @@ export const SelectLivePreset: React.FC<{
     }
 
     return (
-        <div className="modalContainer">
+        <div className="modalContainerLive">
             <div className="overlay" onClick={() => setModalVisible(false)} />
             <div className="modalContentLive">
                 <div className="presetTitle">
@@ -206,8 +199,8 @@ export const SelectLivePreset: React.FC<{
                     )}
                 </div>
                 <div className="modalBtnContainer">
-                    <button className="button" onClick={() => onApplyPresetClick(selectedPreset)}>apply</button>
-                    <button className="button" onClick={onUpdateClick}>update</button>
+                    <button onClick={() => onApplyPresetClick(selectedPreset)}>apply</button>
+                    <button onClick={onUpdateClick}>update</button>
                     <button className="deleteBtn" onClick={onDeleteClick}>delete</button>
                 </div>
             </div>

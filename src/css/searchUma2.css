@@ -1,0 +1,107 @@
+/* * {
+    box-sizing: border-box;
+} */
+
+.searchUma2 {
+    label {
+        cursor: pointer;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    input[type=radio] {
+        cursor: pointer;
+    }
+
+    .liveCharaListArea {
+        padding-top: 10px;
+
+        button {
+            margin-right: 10px;
+        }
+        > div:nth-of-type(2) {
+            margin-top: 10px;
+        }
+    }
+
+    .liveCharaListContainer {
+        div {
+            text-align: left;
+            width: 700px;
+        }
+    }
+
+    .searchTextBox {
+        width: 300px;
+        margin-right: 10px;
+    }
+
+    .btnApplyChanges {
+        position: fixed;
+        right: 40px;
+        bottom: 100px;
+        font-size: 32px;
+        background-color: rgb(139, 232, 255);
+        border: solid rgba(0, 0, 0, 0.2) 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        z-index: 2;
+
+        &:hover {
+            background-color: #e2e8f0;
+        }
+    }
+
+    .searchRadio {
+        margin-left: 20px;
+    }
+
+    .addChara {
+        margin-top: 5px;
+    }
+
+    .addChara button {
+        margin-left: 5px;
+    }
+
+    .selected {
+        position: fixed;
+        width: fit-content;
+        height: fit-content;
+        bottom: 0;
+        right: 20px;
+        text-align: center;
+        padding-top: 10px;
+        font-size: 20px;
+        background-color: white;
+        z-index: 1;
+    }
+
+    .selectedData {
+        vertical-align: middle;
+    }
+
+    .title {
+        text-decoration: underline;
+        cursor: pointer;
+        width: fit-content;
+    }
+
+    .resultOrgCharaContainer {
+        position: relative;
+
+        h3+label {
+            margin-left: 10px;
+        }
+    }
+
+    .resultCharaContainer {
+        position: relative;
+    }
+
+    .resultDressContainer {
+        position: relative;
+    }
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { chara_name_data as Chara } from '../tables/chara_name_data'
-import "../css/css1.css"
+import "../css/resultArea.css"
 
 const GetUmaHome: React.FC<{setSelectedCharaData: (val: Chara) => void, charaData: Chara[], radioName: string}> = ({setSelectedCharaData, charaData, radioName}) => {
     return (
@@ -12,7 +12,7 @@ const GetUmaHome: React.FC<{setSelectedCharaData: (val: Chara) => void, charaDat
                             <label key={index}>
                                 <input type="radio" name={radioName} value={chara.id.toString()}
                                     onClick={() => setSelectedCharaData({...chara})} />
-                                {`ID : ${chara.id} ${chara.chara_name ?? "不明"} (${chara.chara_voice})`}
+                                {`${chara.id} ${chara.chara_name ?? "不明"} (${chara.chara_voice})`}
                             </label>
                         </li>
                     )}

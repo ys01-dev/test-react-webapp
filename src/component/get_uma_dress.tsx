@@ -1,6 +1,6 @@
 import React from 'react'
 import { dress_name_data as Dress } from '../tables/dress_name_data'
-import "../css/css1.css"
+import "../css/resultArea.css"
 
 const GetUmaDress: React.FC<{setSelectedDressData: (val: Dress) => void, dressData: Dress[], radioName: string}> = ({setSelectedDressData, dressData, radioName}) => {
     return (
@@ -12,7 +12,7 @@ const GetUmaDress: React.FC<{setSelectedDressData: (val: Dress) => void, dressDa
                             <label key={index}>
                                 <input type="radio" name={radioName} value={dress.id.toString()}
                                     onClick={() => setSelectedDressData({...dress})} />
-                                {`ID : ${dress.id} ${dress.dress_name} 　(${dress.dress_desc})`}
+                                {`${dress.id} ${dress.dress_name} 　(${dress.dress_desc})`}
                             </label>
                         </li>
                     )}
