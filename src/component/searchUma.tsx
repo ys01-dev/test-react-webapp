@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 //import {atom, useRecoilState } from 'recoil'
 import { useSelector } from "react-redux";
 import { getCharaData, getDressData, changeConfig, getPreset, savePreset } from "../common"
@@ -19,19 +19,19 @@ const SearchUma = () => {
     const sideBarWidth = useSelector<any, number>(state => state.sideBar.width)
     const [snackBarMessage, setSnackBarMessage] = useState("")
     const [snackBarVisible, setSnackBarVisible] = useState(false)
-    const [originalCharaData, setOrgCharaData] = React.useState<Chara[]>([])
-    const [charaData, setCharaData] = React.useState<Chara[]>([])
-    const [dressData, setDressData] = React.useState<Dress[]>([])
-    const [searchTextChara, setSearchTextChara] = React.useState("")
-    const [searchTextOriginChara, setSearchTextOriginChara] = React.useState("")
-    const [searchTextDress, setSearchTextDress] = React.useState("")
-    const [preset, setPreset] = React.useState<umaHome[]>([])
-    const [selectedOrgCharaData, setSelectedOrgCharaData] = React.useState<Chara>(initCharaNameData)
-    const [selectedReplCharaData, setSelectedCharaData] = React.useState<Chara>(initCharaNameData)
-    const [selectedDressData, setSelectedDressData] = React.useState<Dress>(initDressNameData)
-    const [isEnableCharaRepl, setEnableCharaReplCheck] = React.useState(true)
-    const [isOriginalCharaCheck, setOriginCharaCheck] = React.useState(false)
-    const [isModalVisible, setModalVisible] = React.useState(false)
+    const [originalCharaData, setOrgCharaData] = useState<Chara[]>([])
+    const [charaData, setCharaData] = useState<Chara[]>([])
+    const [dressData, setDressData] = useState<Dress[]>([])
+    const [searchTextChara, setSearchTextChara] = useState("")
+    const [searchTextOriginChara, setSearchTextOriginChara] = useState("")
+    const [searchTextDress, setSearchTextDress] = useState("")
+    const [preset, setPreset] = useState<umaHome[]>([])
+    const [selectedOrgCharaData, setSelectedOrgCharaData] = useState<Chara>(initCharaNameData)
+    const [selectedReplCharaData, setSelectedCharaData] = useState<Chara>(initCharaNameData)
+    const [selectedDressData, setSelectedDressData] = useState<Dress>(initDressNameData)
+    const [isEnableCharaRepl, setEnableCharaReplCheck] = useState(true)
+    const [isOriginalCharaCheck, setOriginCharaCheck] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false)
     const [resAreaOrgCharaVisible, setResAreaOrgCharaVisible] = useState(true)
     const [resAreaRplCharaVisible, setresAreaRplCharaVisible] = useState(true)
     const [resAreaDressVisible, setresAreaDressVisible] = useState(true)

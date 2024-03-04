@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import GetUmaHome from './get_uma_home'
 import GetUmaDress from './get_uma_dress'
@@ -16,31 +16,31 @@ const SearchUma2 = () => {
     const strReplace = "replace"
     const strDress = "dress"
     const sideBarWidth = useSelector<any, number>(state => state.sideBar.width)
-    const [snackBarMessage, setSnackBarMessage] = React.useState("")
-    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
-    const [searchTextReplace, setSearchTextReplace] = React.useState("")
-    const [searchTextOrgChara, setSearchTextOrgChara] = React.useState("")
-    const [searchTextDress, setSearchTextDress] = React.useState("")
-    const [originalCharaData, setOriginalChara] = React.useState<Chara[]>([])
-    const [replCharaData, setReplChara] = React.useState<Chara[]>([])
-    const [dressData, setDress] = React.useState<Dress[]>([])
-    const [selectedOriginalChara, setSelectedOriginalChara] = React.useState<Chara>({ ...initCharaNameData })
-    const [selectedReplChara, setSelectedReplChara] = React.useState<Chara>({ ...initCharaNameData })
-    const [selectedDress, setSelectedDress] = React.useState<Dress>({ ...initDressNameData })
-    const [preset, setPreset] = React.useState<umaLive[]>([])
-    const [liveChara1, setLiveChara1] = React.useState<umaLiveChara>({ ...initUmaLiveChara })
-    const [liveChara2, setLiveChara2] = React.useState<umaLiveChara>({ ...initUmaLiveChara })
-    const [liveChara3, setLiveChara3] = React.useState<umaLiveChara>({ ...initUmaLiveChara })
-    const [liveChara4, setLiveChara4] = React.useState<umaLiveChara>({ ...initUmaLiveChara })
-    const [liveChara5, setLiveChara5] = React.useState<umaLiveChara>({ ...initUmaLiveChara })
-    const [selectedLiveCharaRadio, setSelectedLiveCharaRadio] = React.useState<number>(-1)
-    //const [selectedLiveChara, setSelectedLiveChara] = React.useState<umaLiveChara>({...initUmaLiveChara})
-    const [isEnableCharaRepl, setEnableCharaReplCheck] = React.useState<boolean>(true)
-    const [resAreaOrgCharaVisible, setResAreaOrgCharaVisible] = React.useState(true)
-    const [resAreaRplCharaVisible, setresAreaRplCharaVisible] = React.useState(true)
-    const [resAreaDressVisible, setresAreaDressVisible] = React.useState(true)
-    const [isModalVisible, setModalVisible] = React.useState(false)
-    const [liveCharaStateFunc, setLiveCharaStateFunc] = React.useState<React.Dispatch<React.SetStateAction<umaLiveChara>>>(() => setLiveChara1)
+    const [snackBarMessage, setSnackBarMessage] = useState("")
+    const [snackBarVisible, setSnackBarVisible] = useState(false)
+    const [searchTextReplace, setSearchTextReplace] = useState("")
+    const [searchTextOrgChara, setSearchTextOrgChara] = useState("")
+    const [searchTextDress, setSearchTextDress] = useState("")
+    const [originalCharaData, setOriginalChara] = useState<Chara[]>([])
+    const [replCharaData, setReplChara] = useState<Chara[]>([])
+    const [dressData, setDress] = useState<Dress[]>([])
+    const [selectedOriginalChara, setSelectedOriginalChara] = useState<Chara>({ ...initCharaNameData })
+    const [selectedReplChara, setSelectedReplChara] = useState<Chara>({ ...initCharaNameData })
+    const [selectedDress, setSelectedDress] = useState<Dress>({ ...initDressNameData })
+    const [preset, setPreset] = useState<umaLive[]>([])
+    const [liveChara1, setLiveChara1] = useState<umaLiveChara>({ ...initUmaLiveChara })
+    const [liveChara2, setLiveChara2] = useState<umaLiveChara>({ ...initUmaLiveChara })
+    const [liveChara3, setLiveChara3] = useState<umaLiveChara>({ ...initUmaLiveChara })
+    const [liveChara4, setLiveChara4] = useState<umaLiveChara>({ ...initUmaLiveChara })
+    const [liveChara5, setLiveChara5] = useState<umaLiveChara>({ ...initUmaLiveChara })
+    const [selectedLiveCharaRadio, setSelectedLiveCharaRadio] = useState<number>(-1)
+    //const [selectedLiveChara, setSelectedLiveChara] = useState<umaLiveChara>({...initUmaLiveChara})
+    const [isEnableCharaRepl, setEnableCharaReplCheck] = useState<boolean>(true)
+    const [resAreaOrgCharaVisible, setResAreaOrgCharaVisible] = useState(true)
+    const [resAreaRplCharaVisible, setresAreaRplCharaVisible] = useState(true)
+    const [resAreaDressVisible, setresAreaDressVisible] = useState(true)
+    const [isModalVisible, setModalVisible] = useState(false)
+    const [liveCharaStateFunc, setLiveCharaStateFunc] = useState<React.Dispatch<React.SetStateAction<umaLiveChara>>>(() => setLiveChara1)
     const liveCharaRadioArr = [{ liveChara: liveChara1, checked: true, fun: setLiveChara1 }, { liveChara: liveChara2, checked: false, fun: setLiveChara2 },
     { liveChara: liveChara3, checked: false, fun: setLiveChara3 }, { liveChara: liveChara4, checked: false, fun: setLiveChara4 },
     { liveChara: liveChara5, checked: false, fun: setLiveChara5 }]

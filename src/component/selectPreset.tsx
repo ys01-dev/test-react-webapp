@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { deletePreset, updatePreset } from "../common"
 import { chara_name_data as Chara } from '../tables/chara_name_data'
 import { dress_name_data as Dress } from '../tables/dress_name_data'
@@ -14,10 +14,10 @@ export const SelectHomePreset: React.FC<{
     onApplyPresetClick: (data: umaHome) => void,
     onPresetClick: () => void
 }> = ({ presetData, selectedReplCharaData, selectedDressData, setModalVisible, onApplyPresetClick, onPresetClick }) => {
-    const [selectedPreset, setSelectedPreset] = React.useState<umaHome>(initUmaHome)
-    const [selectedRadio, setSelectedRadio] = React.useState<{ index: number, _id: string }>({ index: -1, _id: "" })
-    const [snackBarMessage, setSnackBarMessage] = React.useState("")
-    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
+    const [selectedPreset, setSelectedPreset] = useState<umaHome>(initUmaHome)
+    const [selectedRadio, setSelectedRadio] = useState<{ index: number, _id: string }>({ index: -1, _id: "" })
+    const [snackBarMessage, setSnackBarMessage] = useState("")
+    const [snackBarVisible, setSnackBarVisible] = useState(false)
 
     const showSnackBar = (message: string) => {
         setSnackBarMessage(message)
@@ -29,7 +29,7 @@ export const SelectHomePreset: React.FC<{
         if (selectedRadio.index < 0) {
             showSnackBar("any preset isn't selected")
             return
-        } else if(selectedReplCharaData.id === 0 || selectedDressData.id === 0) {
+        } else if (selectedReplCharaData.id === 0 || selectedDressData.id === 0) {
             showSnackBar("any character or dress isn't selected")
             return
         }
@@ -46,8 +46,8 @@ export const SelectHomePreset: React.FC<{
                 dressDesc: selectedDressData.dress_desc
             })
             onPresetClick()
-        } catch(err) {
-            ret =err
+        } catch (err) {
+            ret = err
         }
         showSnackBar(ret)
     }
@@ -57,7 +57,7 @@ export const SelectHomePreset: React.FC<{
             showSnackBar("any preset isn't selected")
         } else if (window.confirm("are you sure to delete?")) {
             let ret
-            
+
             try {
                 ret = await deletePreset({ col: umamusumeDoc.uma_home, _id: selectedRadio._id })
                 onPresetClick()
@@ -112,11 +112,11 @@ export const SelectLivePreset: React.FC<{
     onApplyPresetClick: (data: umaLive) => void,
     onPresetClick: () => void
 }> = ({ presetData, selectedLiveCharaArr, setModalVisible, onApplyPresetClick, onPresetClick }) => {
-    const [selectedPreset, setSelectedPreset] = React.useState<umaLive>({...initUmaLive})
-    const [selectedPresetIndex, setSelectedPresetIndex] = React.useState<number>(-1)
-    const [selectedPresetIndexObj, setSelectedPresetIndexObj] = React.useState<{[prop: string]: number}>({})
-    const [snackBarMessage, setSnackBarMessage] = React.useState("")
-    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
+    const [selectedPreset, setSelectedPreset] = useState<umaLive>({ ...initUmaLive })
+    const [selectedPresetIndex, setSelectedPresetIndex] = useState<number>(-1)
+    const [selectedPresetIndexObj, setSelectedPresetIndexObj] = useState<{ [prop: string]: number }>({})
+    const [snackBarMessage, setSnackBarMessage] = useState("")
+    const [snackBarVisible, setSnackBarVisible] = useState(false)
 
     const showSnackBar = (message: string) => {
         setSnackBarMessage(message)
@@ -138,8 +138,8 @@ export const SelectLivePreset: React.FC<{
                 data: selectedLiveCharaArr
             })
             onPresetClick()
-        } catch(err) {
-            ret =err
+        } catch (err) {
+            ret = err
         }
         showSnackBar(ret)
     }
@@ -161,20 +161,20 @@ export const SelectLivePreset: React.FC<{
     }
 
     const onPresetRadioClick = (index: number) => {
-        let obj = (({...p}) => {
+        let obj = (({ ...p }) => {
             selectedPresetIndexObj.hasOwnProperty(index.toString()) ? delete p[index.toString()] : p[index.toString()] = index
             return p
-        })({...selectedPresetIndexObj})
+        })({ ...selectedPresetIndexObj })
 
         setSelectedPresetIndex(index)
         setSelectedPresetIndexObj(obj)
     }
 
     const onExpandClick = () => {
-        const tmp: {[prop: string]: number} = {}
+        const tmp: { [prop: string]: number } = {}
         setSelectedPresetIndexObj({})
-        
-        if(selectedPreset.data.length !== Object.keys(selectedPresetIndexObj).length) {
+
+        if (selectedPreset.data.length !== Object.keys(selectedPresetIndexObj).length) {
             selectedPreset.data.forEach((data, index) => tmp[index.toString()] = index)
             setSelectedPresetIndexObj(tmp)
         }
