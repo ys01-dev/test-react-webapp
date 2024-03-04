@@ -3,6 +3,7 @@ import { deletePreset, updatePreset } from "../common"
 import { chara_name_data as Chara } from '../tables/chara_name_data'
 import { dress_name_data as Dress } from '../tables/dress_name_data'
 import { umamusumeDoc, initUmaHome, umaLive, initUmaLive, umaHome, umaLiveChara } from '../tables/umamusume'
+import { SnackBar, sleep } from './snackbar';
 import "../css/modal.css"
 
 export const SelectHomePreset: React.FC<{
@@ -15,13 +16,21 @@ export const SelectHomePreset: React.FC<{
 }> = ({ presetData, selectedReplCharaData, selectedDressData, setModalVisible, onApplyPresetClick, onPresetClick }) => {
     const [selectedPreset, setSelectedPreset] = React.useState<umaHome>(initUmaHome)
     const [selectedRadio, setSelectedRadio] = React.useState<{ index: number, _id: string }>({ index: -1, _id: "" })
+    const [snackBarMessage, setSnackBarMessage] = React.useState("")
+    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
+
+    const showSnackBar = (message: string) => {
+        setSnackBarMessage(message)
+        setSnackBarVisible(true)
+        sleep(5000).then(() => setSnackBarVisible(false))
+    }
 
     const onUpdateClick = async () => {
         if (selectedRadio.index < 0) {
-            alert("preset isn't selected")
+            showSnackBar("any preset isn't selected")
             return
         } else if(selectedReplCharaData.id === 0 || selectedDressData.id === 0) {
-            alert("character or dress isn't selected")
+            showSnackBar("any character or dress isn't selected")
             return
         }
         let ret
@@ -40,12 +49,12 @@ export const SelectHomePreset: React.FC<{
         } catch(err) {
             ret =err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onDeleteClick = async () => {
         if (selectedRadio.index < 0) {
-            alert("preset isn't selected")
+            showSnackBar("any preset isn't selected")
         } else if (window.confirm("are you sure to delete?")) {
             let ret
             
@@ -55,7 +64,7 @@ export const SelectHomePreset: React.FC<{
             } catch (err) {
                 ret = err
             }
-            alert(ret)
+            showSnackBar(ret)
         }
     }
 
@@ -71,7 +80,7 @@ export const SelectHomePreset: React.FC<{
                 <p className="presetTitle">select preset</p>
                 <button className="closeBtn" onClick={() => setModalVisible(false)}>✕</button>
                 <div className="presetContainer">
-                    {presetData.length > 0 && (
+                    {Array.isArray(presetData) && presetData.length > 0 && (
                         <ul>
                             {presetData.map((data, index) =>
                                 <li key={index}>
@@ -91,6 +100,7 @@ export const SelectHomePreset: React.FC<{
                     <button className="deleteBtn" onClick={onDeleteClick}>delete</button>
                 </div>
             </div>
+            <SnackBar message={snackBarMessage} visible={snackBarVisible} setVisible={setSnackBarVisible} />
         </div>
     )
 }
@@ -105,10 +115,18 @@ export const SelectLivePreset: React.FC<{
     const [selectedPreset, setSelectedPreset] = React.useState<umaLive>({...initUmaLive})
     const [selectedPresetIndex, setSelectedPresetIndex] = React.useState<number>(-1)
     const [selectedPresetIndexObj, setSelectedPresetIndexObj] = React.useState<{[prop: string]: number}>({})
+    const [snackBarMessage, setSnackBarMessage] = React.useState("")
+    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
+
+    const showSnackBar = (message: string) => {
+        setSnackBarMessage(message)
+        setSnackBarVisible(true)
+        sleep(5000).then(() => setSnackBarVisible(false))
+    }
 
     const onUpdateClick = async () => {
         if (selectedPresetIndex < 0) {
-            alert("preset isn't selected")
+            showSnackBar("any preset isn't selected")
             return
         }
         let ret
@@ -123,12 +141,12 @@ export const SelectLivePreset: React.FC<{
         } catch(err) {
             ret =err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onDeleteClick = async () => {
         if (selectedPresetIndex < 0) {
-            alert("preset isn't selected")
+            showSnackBar("any preset isn't selected")
         } else if (window.confirm("are you sure to delete?")) {
             let ret
 
@@ -138,7 +156,7 @@ export const SelectLivePreset: React.FC<{
             } catch (err) {
                 ret = err
             }
-            alert(ret)
+            showSnackBar(ret)
         }
     }
 
@@ -172,15 +190,15 @@ export const SelectLivePreset: React.FC<{
                     <button className="closeBtn" onClick={() => setModalVisible(false)}>✕</button>
                 </div>
                 <div className="presetContainerLive">
-                    {presetData.length > 0 && (
+                    {Array.isArray(presetData) && presetData.length > 0 && (
                         <ul>
                             {presetData.map((preset, index) =>
                                 <li key={index}>
                                     {preset.data.length > 0 && (
                                         <label key={index}>
                                             <div className="livePresetContainer" title={preset.data.map(obj => ((({ originalCharaName: _1, replCharaName: _2, dressName: _3, ...p }) => {
-                                                    return (_1 === "" ? "n/a → " : `${_1} → `) + (_2 === "" ? "n/a" : _2) + (_3 === "" ? "(n/a)" : `(${_3})`)
-                                                })(obj))).join("\n")}>
+                                                return (_1 === "" ? "n/a → " : `${_1} → `) + (_2 === "" ? "n/a" : _2) + (_3 === "" ? "(n/a)" : `(${_3})`)
+                                            })(obj))).join("\n")}>
                                                 <input type="radio" name="presetRadio" onClick={() => onPresetRadioClick(index)} onChange={() => setSelectedPreset(preset)} />
                                                 {`preset${index}`}
                                                 {selectedPresetIndexObj.hasOwnProperty(index) && preset.data.map((obj, i) =>
@@ -204,6 +222,7 @@ export const SelectLivePreset: React.FC<{
                     <button className="deleteBtn" onClick={onDeleteClick}>delete</button>
                 </div>
             </div>
+            <SnackBar message={snackBarMessage} visible={snackBarVisible} setVisible={setSnackBarVisible} />
         </div>
     )
 }

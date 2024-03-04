@@ -6,7 +6,6 @@ import { motion } from "framer-motion"
 import SearchUma from './component/searchUma'
 import SearchUma2 from './component/searchUma2'
 import { setWidth } from "./store"
-import logo from "./image/logo_umamusume-fc81a00.png"
 import './css/App.css'
 
 function App() {
@@ -14,6 +13,7 @@ function App() {
     const initialMargin = 160
     const [isSideBarOpened, setSideBarOpened] = useState<boolean>(true)
     const [contentMargin, setContentMargin] = useState<number>(initialMargin)
+    const [selected, setSelected] = useState(0)
     const variants = {
         opened: { x: 0, transition: { duration: 0.1, y: { stiffness: 1000 } } },
         closed: { x: "-100%", transition: { duration: 0.1, y: { stiffness: 1000 } } }
@@ -33,13 +33,12 @@ function App() {
             <div className="sidebarContainer">
                 <Router>
                     <motion.nav className="sidebar" initial={{ x: 0 }} animate={isSideBarOpened ? "opened" : "closed"} variants={variants}>
-                        <a href="http://192.168.11.2:3000/home"><img src={logo} alt="" /></a>
                         <ul>
                             <li>
-                                <Link to="/home" state={{ sideBarWidth: contentMargin }}>→HomeChara</Link><br />
+                                <Link to="/home" state={{ sideBarWidth: contentMargin }} onClick={() => { setSelected(0) }} style={{ backgroundColor: selected === 0 ? "#c6edff" : "" }}>→HomeChara</Link><br />
                             </li>
                             <li>
-                                <Link to="/live">→LiveChara</Link>
+                                <Link to="/live" onClick={() => { setSelected(1) }} style={{ backgroundColor: selected === 1 ? "#c6edff" : "" }}>→LiveChara</Link>
                             </li>
                         </ul>
                     </motion.nav>

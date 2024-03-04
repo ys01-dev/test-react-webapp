@@ -8,6 +8,7 @@ import { chara_name_data as Chara, initCharaNameData } from '../tables/chara_nam
 import { dress_name_data as Dress, initDressNameData } from '../tables/dress_name_data'
 import { umaHome, umamusumeDoc } from '../tables/umamusume'
 import { SelectHomePreset } from './selectPreset'
+import { SnackBar, sleep } from './snackbar';
 import "../css/searchUma.css"
 
 const SearchUma = () => {
@@ -16,6 +17,8 @@ const SearchUma = () => {
     const strReplace = "replace"
     const strDress = "dress"
     const sideBarWidth = useSelector<any, number>(state => state.sideBar.width)
+    const [snackBarMessage, setSnackBarMessage] = useState("")
+    const [snackBarVisible, setSnackBarVisible] = useState(false)
     const [originalCharaData, setOrgCharaData] = React.useState<Chara[]>([])
     const [charaData, setCharaData] = React.useState<Chara[]>([])
     const [dressData, setDressData] = React.useState<Dress[]>([])
@@ -35,6 +38,12 @@ const SearchUma = () => {
     //#endregion
 
     //#region fun declaration
+    const showSnackBar = (message: string) => {
+        setSnackBarMessage(message)
+        setSnackBarVisible(true)
+        sleep(5000).then(() => setSnackBarVisible(false))
+    }
+
     const onSearchClick = async (from: string) => {
         try {
             switch (from) {
@@ -48,11 +57,11 @@ const SearchUma = () => {
                     setDressData(await getDressData({ name: searchTextDress.trim() }))
                     break
                 default:
-                    alert("select character or dress radio button first")
+                    showSnackBar("select character or dress radio button first")
                     break
             }
         } catch (err: any) {
-            alert(err)
+            showSnackBar(err)
         }
     }
 
@@ -71,22 +80,22 @@ const SearchUma = () => {
         } catch (err) {
             ret = err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onPresetClick = async () => {
         if (!isModalVisible) setModalVisible(true)
         try {
             setPreset(await getPreset({ col: 0, query: {} }))
-        } catch (err) {
-            alert(err)
+        } catch (err: any) {
+            showSnackBar(err)
         }
         return 1
     }
 
     const onSavePresetClick = async () => {
         if (selectedReplCharaData.id === 0 || selectedDressData.id === 0) {
-            alert("character or dress isn't selected")
+            showSnackBar("character or dress isn't selected")
             return
         }
         let ret
@@ -105,7 +114,7 @@ const SearchUma = () => {
         } catch (err) {
             ret = err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onApplyPresetClick = (data: umaHome) => {
@@ -134,22 +143,9 @@ const SearchUma = () => {
                 <SelectHomePreset presetData={preset} selectedReplCharaData={selectedReplCharaData} selectedDressData={selectedDressData}
                     setModalVisible={setModalVisible} onApplyPresetClick={onApplyPresetClick} onPresetClick={onPresetClick} />
             )}
-            <div className="selected">
-                <span className="selectedData">
-                    {selectedOrgCharaData.id !== 0 && isOriginalCharaCheck && (
-                        <span>
-                            {selectedOrgCharaData.id === 0 ? "" : selectedOrgCharaData.chara_name}<br />
-                            ↓<br />
-                        </span>
-                    )}
-                    {selectedReplCharaData.id === 0 ? "n/a" : selectedReplCharaData.chara_name}
-                    {` : ${selectedDressData.id === 0 ? "n/a" : selectedDressData.dress_name}`}
-                    {`(${selectedDressData.dress_desc === "" ? "n/a" : selectedDressData.dress_desc})`}
-                </span>
-            </div>
             <button onClick={onApplyChangesClick} className="btnApplyChanges">apply</button>
-            <div style={{ marginLeft: (sideBarWidth === 0 ? 70 : 40) + "px" }}>
-                <div className="options">
+            <div className="contentContainer" style={{ marginLeft: (sideBarWidth === 0 ? 70 : 40) + "px" }}>
+                <div className="header">
                     <div>
                         <label>
                             <input type="checkbox" defaultChecked={isEnableCharaRepl} onChange={e => setEnableCharaReplCheck(e.target.checked)} />
@@ -160,7 +156,18 @@ const SearchUma = () => {
                             replace original character
                         </label>
                     </div>
-                    <div>
+                    <div className="selectedData">
+                        <span>(selected)</span>
+                        {selectedOrgCharaData.id !== 0 && isOriginalCharaCheck && (
+                            <span>
+                                {selectedOrgCharaData.id === 0 ? "" : selectedOrgCharaData.chara_name}→
+                            </span>
+                        )}
+                        {selectedReplCharaData.id === 0 ? "n/a" : selectedReplCharaData.chara_name}
+                        {` : ${selectedDressData.id === 0 ? "n/a" : selectedDressData.dress_name}`}
+                        {`(${selectedDressData.dress_desc === "" ? "n/a" : selectedDressData.dress_desc})`}
+                    </div>
+                    <div className="presetButtons">
                         <button onClick={onPresetClick}>preset</button>
                         <button onClick={onSavePresetClick}>save as preset</button>
                     </div>
@@ -200,6 +207,7 @@ const SearchUma = () => {
                     </div>
                 </div>
             </div>
+            <SnackBar message={snackBarMessage} visible={snackBarVisible} setVisible={setSnackBarVisible} />
         </div>
     )
 }

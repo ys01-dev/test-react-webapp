@@ -7,6 +7,7 @@ import { dress_name_data as Dress, initDressNameData } from '../tables/dress_nam
 import { initUmaLiveChara, umaLive, umaLiveChara, umamusumeDoc } from '../tables/umamusume'
 import { SelectLivePreset } from './selectPreset'
 import { changeConfig, getCharaData, getDressData, getPreset, savePreset } from '../common'
+import { SnackBar, sleep } from './snackbar';
 import "../css/searchUma2.css"
 
 const SearchUma2 = () => {
@@ -15,6 +16,8 @@ const SearchUma2 = () => {
     const strReplace = "replace"
     const strDress = "dress"
     const sideBarWidth = useSelector<any, number>(state => state.sideBar.width)
+    const [snackBarMessage, setSnackBarMessage] = React.useState("")
+    const [snackBarVisible, setSnackBarVisible] = React.useState(false)
     const [searchTextReplace, setSearchTextReplace] = React.useState("")
     const [searchTextOrgChara, setSearchTextOrgChara] = React.useState("")
     const [searchTextDress, setSearchTextDress] = React.useState("")
@@ -45,6 +48,12 @@ const SearchUma2 = () => {
     //#endregion
 
     //#region fun declaration
+    const showSnackBar = (message: string) => {
+        setSnackBarMessage(message)
+        setSnackBarVisible(true)
+        sleep(5000).then(() => setSnackBarVisible(false))
+    }
+
     const onSearchClick = async (from: string) => {
         try {
             switch (from) {
@@ -64,11 +73,11 @@ const SearchUma2 = () => {
                     break
                 }
                 default:
-                    alert("select character or dress radio button at first")
+                    showSnackBar("select character or dress radio button at first")
                     break
             }
         } catch (err: any) {
-            alert(err)
+            showSnackBar(err)
         }
     }
 
@@ -90,15 +99,15 @@ const SearchUma2 = () => {
         } catch (err) {
             ret = err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onPresetClick = async () => {
         if (!isModalVisible) setModalVisible(true)
         try {
             setPreset(await getPreset({ col: umamusumeDoc.uma_live, query: {} }))
-        } catch (err) {
-            alert(err)
+        } catch (err: any) {
+            showSnackBar(err)
         }
     }
 
@@ -113,7 +122,7 @@ const SearchUma2 = () => {
         } catch (err) {
             ret = err
         }
-        alert(ret)
+        showSnackBar(ret)
     }
 
     const onApplyPresetClick = (preset: umaLive) => {
@@ -170,8 +179,8 @@ const SearchUma2 = () => {
                 <SelectLivePreset presetData={preset} selectedLiveCharaArr={[liveChara1, liveChara2, liveChara3, liveChara4, liveChara5]}
                     setModalVisible={setModalVisible} onApplyPresetClick={onApplyPresetClick} onPresetClick={onPresetClick} />
             )}
-            <div style={{ marginLeft: (sideBarWidth === 0 ? 70 : 40) + "px" }}>
-                <div className="liveCharaListArea">
+            <div className="contentContainer" style={{ marginLeft: (sideBarWidth === 0 ? 70 : 40) + "px" }}>
+                <div className="header">
                     <div className="liveCharaListContainer">
                         {liveCharaRadioArr.map((radio, index) =>
                             <div key={index}>
@@ -182,11 +191,16 @@ const SearchUma2 = () => {
                                     → ${radio.liveChara.replCharaID + ":" + (radio.liveChara.replCharaName.length === 0 ? "n/a" : radio.liveChara.replCharaName)}
                                     (${radio.liveChara.dressID + ":" + (radio.liveChara.dressName.length === 0 ? "n/a" : radio.liveChara.dressName)})`}
                                 </label>
+                                {selectedLiveCharaRadio === index && radio.liveChara.originalCharaID + radio.liveChara.replCharaID + radio.liveChara.dressID > 0 && (
+                                    <button className="btnRemove" onClick={onRemoveButton}>remove</button>
+                                )}
                             </div>
                         )}
                     </div>
-                    <button onClick={onAddButton}>add</button>
-                    <button onClick={onRemoveButton}>remove</button>
+                    <div>
+                        <button onClick={onPresetClick}>preset</button>
+                        <button onClick={onSavePresetClick}>save as preset</button>
+                    </div>
                     <div>
                         <label>
                             <input type="checkbox" defaultChecked={isEnableCharaRepl} onChange={e => setEnableCharaReplCheck(e.target.checked)} />
@@ -194,8 +208,13 @@ const SearchUma2 = () => {
                         </label>
                     </div>
                     <div>
-                        <button onClick={onPresetClick}>preset</button>
-                        <button onClick={onSavePresetClick}>save as preset</button>
+                        <button onClick={onAddButton}>add to {selectedLiveCharaRadio}</button>
+                        <span className="selectedData">
+                            <span>(selected)</span>
+                            {selectedOriginalChara.id === 0 ? "n/a" : selectedOriginalChara.chara_name}
+                            {" → "}{selectedReplChara.id === 0 ? "n/a" : selectedReplChara.chara_name}
+                            {` : ${selectedDress.id === 0 ? "n/a" : selectedDress.dress_name}`}
+                        </span>
                     </div>
                 </div>
                 <div className="resultOrgCharaContainer">
@@ -230,14 +249,7 @@ const SearchUma2 = () => {
                 </div>
             </div>
             <button onClick={onApplyChangesClick} className="btnApplyChanges">apply</button>
-            <div className="selected">
-                <span className="selectedData">
-                    {selectedOriginalChara.id === 0 ? "n/a" : selectedOriginalChara.chara_name}<br />
-                    ↓<br />
-                    {selectedReplChara.id === 0 ? "n/a" : selectedReplChara.chara_name}
-                    {` : ${selectedDress.id === 0 ? "n/a" : selectedDress.dress_name}`}
-                </span>
-            </div>
+            <SnackBar message={snackBarMessage} visible={snackBarVisible} setVisible={setSnackBarVisible}/>
         </div>
     )
 }

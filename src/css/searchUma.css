@@ -14,19 +14,16 @@
         cursor: pointer;
     }
 
-    .options {
-        padding-top: 10px;
-        button {
-            margin-right: 10px;
-        }
+    .contentContainer {
+        margin-left: 70px;
+        margin-bottom: 200px;
     }
 
-    .liveCharaListContainer {
-        padding-left: calc(50% - 300px);
+    .header {
+        padding-top: 10px;
 
-        div {
-            text-align: left;
-            width: 700px;
+        .presetButtons button:nth-of-type(1) {
+            margin-right: 10px;
         }
     }
 
@@ -40,44 +37,26 @@
         right: 40px;
         bottom: 30px;
         font-size: 32px;
-        background-color: rgb(139, 232, 255);
-        border: solid rgba(0, 0, 0, 0.2) 2px;
+        background-color: #00d500;
+        color: #ffffff;
+        border: none;
         cursor: pointer;
         border-radius: 4px;
         z-index: 2;
 
         &:hover {
-            background-color: #e2e8f0;
+            background-color: #86ff86;
         }
-    }
-
-    .searchRadio {
-        margin-left: 20px;
-    }
-
-    .addChara {
-        margin-top: 5px;
-
-        button {
-            margin-left: 5px;
-        }
-    }
-
-    .selected {
-        position: fixed;
-        width: fit-content;
-        height: fit-content;
-        top: 0;
-        right: 20px;
-        text-align: center;
-        padding-top: 10px;
-        font-size: 20px;
-        background-color: white;
-        z-index: 1;
     }
 
     .selectedData {
-        vertical-align: middle;
+        padding-top: 10px;
+
+        span:nth-of-type(1) {
+            color: #ff0000;
+            font-size: 18px;
+            margin-right: 10px;
+        }
     }
 
     .title {
