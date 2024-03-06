@@ -114,7 +114,7 @@ export const SelectLivePreset: React.FC<{
 }> = ({ presetData, selectedLiveCharaArr, setModalVisible, onApplyPresetClick, onPresetClick }) => {
     const [selectedPreset, setSelectedPreset] = useState<umaLive>({ ...initUmaLive })
     const [selectedPresetIndex, setSelectedPresetIndex] = useState<number>(-1)
-    const [selectedPresetIndexObj, setSelectedPresetIndexObj] = useState<{ [prop: string]: number }>({})
+    const [openedPresetIndexObj, setOpenedPresetIndexObj] = useState<{ [prop: string]: number }>({})
     const [snackBarMessage, setSnackBarMessage] = useState("")
     const [snackBarVisible, setSnackBarVisible] = useState(false)
 
@@ -162,22 +162,21 @@ export const SelectLivePreset: React.FC<{
 
     const onPresetRadioClick = (index: number) => {
         let obj = (({ ...p }) => {
-            selectedPresetIndexObj.hasOwnProperty(index.toString()) ? delete p[index.toString()] : p[index.toString()] = index
+            openedPresetIndexObj.hasOwnProperty(index.toString()) ? delete p[index.toString()] : p[index.toString()] = index
             return p
-        })({ ...selectedPresetIndexObj })
+        })({ ...openedPresetIndexObj })
 
         setSelectedPresetIndex(index)
-        setSelectedPresetIndexObj(obj)
+        setOpenedPresetIndexObj(obj)
     }
 
     const onExpandClick = () => {
         const tmp: { [prop: string]: number } = {}
-        setSelectedPresetIndexObj({})
-
-        if (selectedPreset.data.length !== Object.keys(selectedPresetIndexObj).length) {
-            selectedPreset.data.forEach((data, index) => tmp[index.toString()] = index)
-            setSelectedPresetIndexObj(tmp)
+        
+        if (presetData.length !== Object.keys(openedPresetIndexObj).length) {
+            presetData.forEach((_, index) => tmp[index.toString()] = index)
         }
+        setOpenedPresetIndexObj({...tmp})
     }
 
     return (
@@ -201,7 +200,7 @@ export const SelectLivePreset: React.FC<{
                                             })(obj))).join("\n")}>
                                                 <input type="radio" name="presetRadio" onClick={() => onPresetRadioClick(index)} onChange={() => setSelectedPreset(preset)} />
                                                 {`preset${index}`}
-                                                {selectedPresetIndexObj.hasOwnProperty(index) && preset.data.map((obj, i) =>
+                                                {openedPresetIndexObj.hasOwnProperty(index) && preset.data.map((obj, i) =>
                                                     <div key={i} className="livePresetContent">
                                                         {`${obj.originalCharaName === "" ? "n/a" : obj.originalCharaName}
                                                         → ${obj.replCharaName === "" ? "n/a" : obj.replCharaName}
