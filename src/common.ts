@@ -1,7 +1,6 @@
 //import React from 'react'
 import axios from 'axios'
-
-export const targetUrl = "http://192.168.11.2:4000/"
+import { targetUrl } from "./_string"
 
 export const getCharaData = (param: {}): Promise<any> => {
     return new Promise<any>((resolve, rejects) => {
@@ -12,13 +11,13 @@ export const getCharaData = (param: {}): Promise<any> => {
             resolve(res.data)
         }).catch(err => {
             rejects(err.response === undefined ? err.message : err.response.data.message)
-        })        
+        })
     })
 }
 
 export const getDressData = (param: {}): Promise<any> => {
     return new Promise<any>((resolve, rejects) => {
-            axios.get(targetUrl + "dress", {
+        axios.get(targetUrl + "dress", {
             params: param,
             timeout: 3000,
         }).then(res => {
